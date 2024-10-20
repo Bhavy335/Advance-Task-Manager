@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f4f4f9; /* Light background */
+            color: #333;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .navbar {
+            background-color: #007bff;
+            padding: 1rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .navbar a {
+            color: white;
+            padding: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .navbar a:hover {
+            color: #f4f4f9;
+            transform: scale(1.05);
+        }
+        .settings-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        .settings-container:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #007bff;
+            transition: color 0.3s;
+        }
+        .setting-item {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s, transform 0.3s;
+        }
+        .setting-item:hover {
+            background: #eaeaea;
+            transform: scale(1.01);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="checkbox"], select {
+            margin-right: 10px;
+        }
+        button {
+            padding: 12px 20px; /* Adjusted padding for better appearance */
+            background: linear-gradient(135deg, #007bff, #0056b3); /* Gradient background */
+            color: white;
+            border: none;
+            border-radius: 25px; /* Rounded edges */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s, box-shadow 0.2s, filter 0.3s;
+            margin-top: 1rem;
+            display: block;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            filter: brightness(1); /* Filter to manage brightness */
+        }
+        button:hover {
+            background: linear-gradient(135deg, #0056b3, #007bff); /* Inverted gradient */
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            filter: brightness(1.1); /* Slightly increase brightness on hover */
+        }
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="INDEX.HTML">Home</a>
+        <a href="login.html">Login</a>
+        <a href="setting.html">Settings</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <!-- Settings Page Content -->
+    <div class="settings-container">
+        <h2>Settings</h2>
+
+        <!-- Theme Preference -->
+        <div class="setting-item">
+            <label for="theme-select">Choose Theme:</label>
+            <select id="theme-select">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+        </div>
+
+        <!-- Notification Preference -->
+        <div class="setting-item">
+            <label for="notifications">Enable Task Notifications:</label>
+            <input type="checkbox" id="notifications" checked />
+        </div>
+
+        <!-- Task Sorting Preference -->
+        <div class="setting-item">
+            <label for="sort-tasks">Sort Tasks By:</label>
+            <select id="sort-tasks">
+                <option value="date">Due Date</option>
+                <option value="priority">Priority</option>
+            </select>
+        </div>
+
+        <!-- Time Format Preference -->
+        <div class="setting-item">
+            <label for="time-format">Time Format:</label>
+            <select id="time-format">
+                <option value="12">12-hour</option>
+                <option value="24">24-hour</option>
+            </select>
+        </div>
+
+        <!-- Save Settings Button -->
+        <button id="save-settings">Save Settings</button>
+    </div>
+
+    <script>
+        // Fetch and apply saved settings on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const notificationsEnabled = localStorage.getItem('notifications') === 'true';
+            const taskSorting = localStorage.getItem('taskSorting') || 'date';
+            const timeFormat = localStorage.getItem('timeFormat') || '12';
+
+            document.getElementById('theme-select').value = savedTheme;
+            document.getElementById('notifications').checked = notificationsEnabled;
+            document.getElementById('sort-tasks').value = taskSorting;
+            document.getElementById('time-format').value = timeFormat;
+
+            // Apply theme
+            document.body.className = savedTheme;
+        });
+
+        // Save settings to localStorage
+        document.getElementById('save-settings').addEventListener('click', function() {
+            const selectedTheme = document.getElementById('theme-select').value;
+            const notificationsEnabled = document.getElementById('notifications').checked;
+            const taskSorting = document.getElementById('sort-tasks').value;
+            const timeFormat = document.getElementById('time-format').value;
+
+            localStorage.setItem('theme', selectedTheme);
+            localStorage.setItem('notifications', notificationsEnabled);
+            localStorage.setItem('taskSorting', taskSorting);
+            localStorage.setItem('timeFormat', timeFormat);
+
+            alert('Settings saved successfully!');
+        });
+    </script>
+
+</body>
+</html>

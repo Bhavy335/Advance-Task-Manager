@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #007bff;
+            padding: 1rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Added shadow for navbar */
+        }
+        .navbar a {
+            color: white;
+            padding: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s, transform 0.2s; /* Added transform transition */
+        }
+        .navbar a:hover {
+            color: #f4f4f9;
+            transform: scale(1.1); /* Slightly enlarge on hover */
+        }
+        .contact-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease; /* Added transition for container */
+        }
+        .contact-container:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #007bff;
+            transition: color 0.3s; /* Added transition for heading */
+        }
+        h2:hover {
+            color: #0056b3; /* Color change on hover */
+        }
+        .input-container {
+            margin-bottom: 1rem;
+            position: relative; /* For animation positioning */
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            transition: transform 0.2s, color 0.3s; /* Added transition */
+        }
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            resize: vertical;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s; /* Added transition */
+        }
+        input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+            border-color: #007bff; /* Border color on focus */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Shadow on focus */
+            outline: none; /* Remove outline */
+        }
+        input[type="text"]:focus + label, input[type="email"]:focus + label, textarea:focus + label {
+            transform: translateY(-20px);
+            color: #007bff; /* Change label color on focus */
+        }
+        button {
+            padding: 12px; /* Increased padding for better appearance */
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s, box-shadow 0.2s; /* Added box-shadow transition */
+            width: 100%;
+            font-size: 1rem;
+            font-weight: bold; /* Added bold font weight */
+            position: relative; /* For ripple effect */
+            overflow: hidden; /* Hide overflow */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Initial box-shadow */
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px); /* Increased movement on hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+        }
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Reset shadow on active */
+        }
+        button::after {
+            content: "";
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        footer {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="INDEX.HTML">Home</a>
+        <a href="login.html">Login</a>
+        <a href="setting.html">Settings</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <!-- Contact Page Content -->
+    <div class="contact-container">
+        <h2>Contact Us</h2>
+        <div class="input-container">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" placeholder="Enter your name" required>
+        </div>
+        <div class="input-container">
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+        <div class="input-container">
+            <label for="subject">Subject:</label>
+            <input type="text" id="subject" placeholder="Subject" required>
+        </div>
+        <div class="input-container">
+            <label for="message">Message:</label>
+            <textarea id="message" rows="5" placeholder="Your message..." required></textarea>
+        </div>
+        <button id="submit-btn">Send Message</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Task Manager - Built with ♥ by [Your Name]</p>
+    </footer>
+
+    <script>
+        document.getElementById('submit-btn').addEventListener('click', function(e) {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (name && email && subject && message) {
+                // Create ripple effect
+                const button = e.currentTarget;
+                const ripple = button.querySelector('::after');
+                const x = e.clientX - button.getBoundingClientRect().left;
+                const y = e.clientY - button.getBoundingClientRect().top;
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                ripple.style.transform = 'scale(0)';
+                setTimeout(() => {
+                    ripple.style.transform = 'scale(4)';
+                }, 0);
+                
+                // Here you can implement sending the message, e.g., via an API
+                alert(`Thank you for contacting us, ${name}! Your message has been sent.`);
+                
+                // Clear the form after submission
+                document.getElementById('name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('subject').value = '';
+                document.getElementById('message').value = '';
+            } else {
+                alert('Please fill out all fields.');
+            }
+        });
+    </script>
+</body>
+</html>

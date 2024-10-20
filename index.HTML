@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Task Manager</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #f4f4f9, #e2e2e2);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            transition: background 0.5s ease;
+        }
+        .navbar {
+            background-color: #007bff;
+            padding: 1rem;
+            text-align: center;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar a {
+            color: white;
+            padding: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .navbar a:hover {
+            color: #d4d4d4;
+        }
+        header {
+            background: #007bff;
+            width: 100%;
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+        .todo-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .todo-container:hover {
+            transform: scale(1.02);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        input[type="text"], input[type="date"], input[type="time"], select {
+            padding: 10px;
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 45%;
+            margin-bottom: 10px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="date"]:focus, input[type="time"]:focus, select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5);
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        button:active::after {
+            content: '';
+            position: absolute;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.5);
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple 0.6s linear forwards;
+        }
+        @keyframes ripple {
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+        #task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .task {
+            background-color: #f4f4f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .task:hover {
+            background-color: #e2e2e2;
+            transform: scale(1.02);
+        }
+        .task.show {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .task.completed {
+            text-decoration: line-through;
+            background-color: #d4edda;
+            transition: background-color 0.5s ease, transform 0.5s ease;
+        }
+        .task.overdue {
+            background-color: #ffcccc;
+        }
+        .task button {
+            background-color: #dc3545;
+            transition: background-color 0.3s ease;
+        }
+        .task button:hover {
+            background-color: #c82333;
+        }
+        footer {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .priority-high { color: #ff0000; }
+        .priority-medium { color: #ffbf00; }
+        .priority-low { color: #00c851; }
+        .task-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        @media (max-width: 600px) {
+            .input-container {
+                flex-direction: column;
+            }
+            input[type="text"], input[type="date"], input[type="time"], select {
+                width: 100%;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="INDEX.HTML">Home</a>
+        <a href="login.html">Login</a>
+        <a href="setting.html">Settings</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <h1>Task Manager</h1>
+        <p>Manage your tasks efficiently with priority and time tracking!</p>
+    </header>
+
+    <!-- Main Content -->
+    <div class="todo-container">
+        <h2>Your To-Do List</h2>
+        <div class="input-container">
+            <input type="text" id="task-input" placeholder="Add a new task..." />
+            <input type="date" id="task-date" />
+            <input type="time" id="task-time" />
+            <select id="task-priority">
+                <option value="low">Low Priority</option>
+                <option value="medium">Medium Priority</option>
+                <option value="high">High Priority</option>
+            </select>
+            <button id="add-task">Add Task</button>
+        </div>
+        <ul id="task-list"></ul>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Task Manager - Built with ♥ by [Your Name]</p>
+    </footer>
+
+    <script>
+        const taskInput = document.getElementById('task-input');
+        const taskDate = document.getElementById('task-date');
+        const taskTime = document.getElementById('task-time');
+        const taskPriority = document.getElementById('task-priority');
+        const addTaskBtn = document.getElementById('add-task');
+        const taskList = document.getElementById('task-list');
+
+        addTaskBtn.addEventListener('click', function() {
+            const taskText = taskInput.value.trim();
+            const dueDate = taskDate.value;
+            const dueTime = taskTime.value;
+            const priority = taskPriority.value;
+
+            if (taskText !== '') {
+                const taskItem = document.createElement('li');
+                taskItem.classList.add('task', 'show');
+
+                if (priority === 'high') taskItem.classList.add('priority-high');
+                if (priority === 'medium') taskItem.classList.add('priority-medium');
+                if (priority === 'low') taskItem.classList.add('priority-low');
+
+                taskItem.innerHTML = `
+                    <div class="task-details">
+                        <span>${taskText}</span>
+                        <small>${dueDate ? 'Due: ' + dueDate : ''} ${dueTime ? 'at ' + dueTime : ''}</small>
+                        <small>Priority: ${priority.charAt(0).toUpperCase() + priority.slice(1)}</small>
+                    </div>
+                    <div>
+                        <button class="complete-btn">Complete</button>
+                        <button class="delete-btn">Delete</button>
+                    </div>
+                `;
+                
+                taskList.appendChild(taskItem);
+
+                // Show a subtle background change
+                document.body.style.transition = 'background 0.5s ease';
+                document.body.style.backgroundColor = '#e3ffe5';
+
+                // Reset background color
+                setTimeout(() => {
+                    document.body.style.backgroundColor = '';
+                }, 500);
+
+                // Clear input fields
+                taskInput.value = '';
+                taskDate.value = '';
+                taskTime.value = '';
+                taskPriority.value = 'low';
+
+                // Add event listeners for the buttons
+                taskItem.querySelector('.complete-btn').addEventListener('click', function() {
+                    taskItem.classList.toggle('completed');
+                    if (taskItem.classList.contains('completed')) {
+                        alert('Task completed!');
+                        // Change background temporarily when task is marked completed
+                        document.body.style.backgroundColor = '#d4edda';
+                        setTimeout(() => {
+                            document.body.style.backgroundColor = '';
+                        }, 500);
+                    } else {
+                        alert('Task marked as incomplete!');
+                    }
+                });
+
+                taskItem.querySelector('.delete-btn').addEventListener('click', function() {
+                    taskItem.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    taskItem.style.opacity = '0';
+                    taskItem.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        taskItem.remove();
+                    }, 500);
+                });
+
+                // Check for overdue tasks
+                if (dueDate && new Date(dueDate) < new Date()) {
+                    taskItem.classList.add('overdue');
+                }
+            } else {
+                alert('Please enter a task!');
+            }
+        });
+    </script>
+
+</body>
+</html>

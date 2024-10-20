@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Task Manager</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #007bff;
+            padding: 1rem;
+            text-align: center;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar a {
+            color: white;
+            padding: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .navbar a:hover {
+            color: #ffcc00; /* Change link color on hover */
+        }
+        header {
+            background: #007bff;
+            width: 100%;
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+        .login-container, .todo-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s; /* Added transition for scaling */
+        }
+        .login-container:hover, .todo-container:hover {
+            transform: scale(1.02); /* Scale up on hover */
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .input-container, .login-container input, .login-container button {
+            display: block;
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s;
+        }
+        .input-container input:focus {
+            border-color: #007bff; /* Change border color on focus */
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        #task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .task:hover {
+            background-color: #e0e7ff; /* Light blue on hover */
+            transform: scale(1.02);
+        }
+        .high-priority {
+            background-color: #ffcccc; /* Light red for high priority */
+        }
+        .medium-priority {
+            background-color: #fff3cd; /* Light yellow for medium priority */
+        }
+        .low-priority {
+            background-color: #d4edda; /* Light green for low priority */
+        }
+        .hidden {
+            display: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: #007bff;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="INDEX.HTML">Home</a>
+        <a href="login.html">Login</a>
+        <a href="setting.html">Settings</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <h1>Task Manager</h1>
+        <p>Manage your tasks efficiently with priority and time tracking!</p>
+    </header>
+
+    <!-- Login Form -->
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="login-btn">Login</button>
+        <p id="error-msg" style="color:red;" class="hidden">Invalid username or password.</p>
+    </div>
+
+    <!-- Main Content: Task Manager (Initially Hidden) -->
+    <div class="todo-container hidden" id="task-manager">
+        <h2>Your To-Do List</h2>
+        <div class="input-container">
+            <input type="text" id="task-input" placeholder="Add a new task..." />
+            <input type="date" id="task-date" />
+            <input type="time" id="task-time" />
+            <select id="task-priority">
+                <option value="low">Low Priority</option>
+                <option value="medium">Medium Priority</option>
+                <option value="high">High Priority</option>
+            </select>
+            <button id="add-task">Add Task</button>
+        </div>
+        <ul id="task-list"></ul>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Task Manager - Built with ♥ by [Your Name]</p>
+    </footer>
+
+    <script>
+        const taskInput = document.getElementById('task-input');
+        const taskDate = document.getElementById('task-date');
+        const taskTime = document.getElementById('task-time');
+        const taskPriority = document.getElementById('task-priority');
+        const addTaskBtn = document.getElementById('add-task');
+        const taskList = document.getElementById('task-list');
+        
+        // Login Elements
+        const loginBtn = document.getElementById('login-btn');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const taskManager = document.getElementById('task-manager');
+        const loginContainer = document.querySelector('.login-container');
+        const errorMsg = document.getElementById('error-msg');
+        
+        // Hardcoded credentials (For demonstration purposes)
+        const validUsername = "admin";
+        const validPassword = "password123";
+
+        loginBtn.addEventListener('click', function() {
+            const enteredUsername = usernameInput.value.trim();
+            const enteredPassword = passwordInput.value.trim();
+
+            if (enteredUsername === validUsername && enteredPassword === validPassword) {
+                loginContainer.classList.add('hidden');
+                taskManager.classList.remove('hidden');
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        });
+
+        addTaskBtn.addEventListener('click', function() {
+            const taskText = taskInput.value.trim();
+            const dueDate = taskDate.value;
+            const dueTime = taskTime.value;
+            const priority = taskPriority.value;
+
+            if (taskText !== '') {
+                const taskItem = document.createElement('li');
+                taskItem.classList.add('task', priority + '-priority', 'fade-in');
+                taskItem.innerHTML = `
+                    <div>
+                        <span>${taskText}</span> - 
+                        <small>${dueDate ? 'Due: ' + dueDate : ''} ${dueTime ? 'at ' + dueTime : ''}</small> - 
+                        <small>Priority: ${priority.charAt(0).toUpperCase() + priority.slice(1)}</small>
+                    </div>
+                    <button class="delete-btn">Delete</button>
+                `;
+
+                // Append task item to the list
+                taskList.appendChild(taskItem);
+                taskInput.value = '';
+                taskDate.value = '';
+                taskTime.value = '';
+                taskPriority.value = 'low';
+
+                const deleteBtn = taskItem.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', function() {
+                    taskItem.classList.add('fade-out');
+                    setTimeout(() => {
+                        taskList.removeChild(taskItem);
+                    }, 500); // Wait for fade-out effect to finish
+                });
+            }
+        });
+    </script>
+</body>
+</html>
