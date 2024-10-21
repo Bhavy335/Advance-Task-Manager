@@ -1,0 +1,43 @@
+name: Flask App CI
+
+on:
+  push:
+    branches:
+      - main  # Change to your default branch if necessary
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'  # Specify your Python version
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Tests
+      run: |
+        # Assuming you have tests set up for your Flask app
+        python -m unittest discover -s tests
+
+    - name: Build HTML (Optional)
+      run: |
+        # If you have any build steps for your HTML or other assets
+        echo "Building HTML from templates/index.html..."
+        # Example: Could include commands to preprocess HTML if necessary
+
+    - name: Deploy to Server
+      run: |
+        # Add your deployment commands here
+        echo "Deploying the application..."
