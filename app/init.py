@@ -13,6 +13,6 @@ def create_app():
     login_manager.init_app(app)
 
     with app.app_context():
-        from . import routes  # Ensure this is at the end after db initialization
+        from .init import routes  # Ensure this is at the end after db initialization
 
     return app
