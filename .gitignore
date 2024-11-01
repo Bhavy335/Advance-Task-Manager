@@ -8,4 +8,6 @@ __pycache__/
 # Ignore IDE configurations
 .idea/
 .vscode/
+
+instance/
 # Ignore any other files or folders you don't want to track
