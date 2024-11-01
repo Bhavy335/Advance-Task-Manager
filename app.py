@@ -36,6 +36,18 @@ initialize_db()
 @app.route('/')
 def index():
     return render_template('index.html')
+@app.route('/index.html')
+def indexhtml():
+    return render_template('index.html')
+@app.route('/login.html')
+def login():
+    return render_template('login.html')
+@app.route('/setting.html')
+def settiing():
+    return render_template('setting.html')
+@app.route('/contact.html')
+def contact():
+    return render_template('contact.html')
 
 # Add a new todo
 @app.route('/todos', methods=['POST'])
