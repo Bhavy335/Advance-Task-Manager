@@ -292,7 +292,8 @@
     
             // Format due date and time
             const dueDate = taskDate || new Date().toISOString().split("T")[0];
-            const formattedDueDate = `${dueDate} ${taskTime || "12:00 PM"}`;
+            const formattedDueDate = `${dueDate} ${taskTime || "00:00"}`;
+
     
             fetch('/todos', {
                 method: 'POST',
