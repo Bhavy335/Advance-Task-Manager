@@ -11,3 +11,4 @@ __pycache__/
 
 instance/
 # Ignore any other files or folders you don't want to track
+test.py

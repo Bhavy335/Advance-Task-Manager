@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Task Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -11,8 +13,9 @@
             color: #333;
             margin: 0;
             padding: 0;
-            transition: background 0.5s ease;
+            overflow-x: hidden;
         }
+
         .navbar {
             background-color: #007bff;
             padding: 1rem;
@@ -22,22 +25,28 @@
             top: 0;
             z-index: 1000;
         }
+
         .navbar a {
             color: white;
             padding: 0 15px;
             text-decoration: none;
             transition: color 0.3s ease;
+            font-weight: 500;
         }
+
         .navbar a:hover {
-            color: #d4d4d4;
+            color: #ffcc00;
         }
+
         header {
             background: #007bff;
             width: 100%;
             padding: 2rem;
             text-align: center;
             color: white;
+            border-bottom: 2px solid #0056b3;
         }
+
         .todo-container {
             width: 90%;
             max-width: 600px;
@@ -45,37 +54,52 @@
             background: white;
             padding: 2rem;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
-        .todo-container:hover {
-            transform: scale(1.02);
-        }
+
         h2 {
             text-align: center;
             margin-bottom: 1rem;
             transition: color 0.3s ease;
+            font-weight: 700;
         }
+
         .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .datetime-container {
             display: flex;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
+            margin-bottom: 10px;
         }
-        input[type="text"], input[type="date"], input[type="time"], select {
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        textarea {
             padding: 10px;
-            flex-grow: 1;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 45%;
-            margin-bottom: 10px;
+            width: 100%;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-size: 16px;
         }
-        input[type="text"]:focus, input[type="date"]:focus, input[type="time"]:focus, select:focus {
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
             border-color: #007bff;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
         }
+
         button {
             padding: 10px;
             background-color: #007bff;
@@ -84,75 +108,61 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            position: relative;
-            overflow: hidden;
+            font-weight: 500;
+            font-size: 16px;
+            margin-top: 10px;
         }
+
         button:hover {
             background-color: #0056b3;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5);
         }
+
         button:active {
             transform: translateY(1px);
         }
-        button:active::after {
-            content: '';
-            position: absolute;
-            width: 300%;
-            height: 300%;
-            background: rgba(255, 255, 255, 0.5);
-            top: 50%;
-            left: 50%;
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            animation: ripple 0.6s linear forwards;
-        }
-        @keyframes ripple {
-            to {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0;
-            }
-        }
+
         #task-list {
             list-style-type: none;
             padding: 0;
         }
+
         .task {
             background-color: #f4f4f9;
             margin: 10px 0;
-            padding: 10px;
+            padding: 15px;
             border-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
-            opacity: 1;
-            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .task:hover {
             background-color: #e2e2e2;
             transform: scale(1.02);
         }
-        .task.show {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
+
         .task.completed {
             text-decoration: line-through;
             background-color: #d4edda;
             transition: background-color 0.5s ease, transform 0.5s ease;
         }
-        .task.overdue {
-            background-color: #ffcccc;
-        }
+
         .task button {
             background-color: #dc3545;
             transition: background-color 0.3s ease;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 14px;
         }
+
         .task button:hover {
             background-color: #c82333;
         }
+
         footer {
             background-color: #007bff;
             color: white;
@@ -164,27 +174,44 @@
             margin-top: 20px;
             transition: background-color 0.3s ease;
         }
-        .priority-high { color: #ff0000; }
-        .priority-medium { color: #ffbf00; }
-        .priority-low { color: #00c851; }
+
+        .priority-high {
+            color: #ff0000;
+        }
+
+        .priority-medium {
+            color: #ffbf00;
+        }
+
+        .priority-low {
+            color: #00c851;
+        }
+
         .task-details {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
         }
+
         @media (max-width: 600px) {
-            .input-container {
+            .datetime-container {
                 flex-direction: column;
             }
-            input[type="text"], input[type="date"], input[type="time"], select {
+
+            input[type="text"],
+            input[type="date"],
+            select,
+            textarea {
                 width: 100%;
             }
+
             button {
                 width: 100%;
             }
         }
     </style>
 </head>
+
 <body>
 
     <!-- Navbar -->
@@ -206,13 +233,16 @@
         <h2>Your To-Do List</h2>
         <div class="input-container">
             <input type="text" id="task-input" placeholder="Add a new task..." />
-            <input type="date" id="task-date" />
-            <input type="time" id="task-time" />
-            <select id="task-priority">
-                <option value="low">Low Priority</option>
-                <option value="medium">Medium Priority</option>
-                <option value="high">High Priority</option>
-            </select>
+            <textarea id="task-description" placeholder="Add a description..." rows="3"></textarea>
+            <div class="datetime-container">
+                <input type="date" id="task-date" />
+                <input type="time" id="task-time" />
+                <select id="task-priority">
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
+                </select>
+            </div>
             <button id="add-task">Add Task</button>
         </div>
         <ul id="task-list"></ul>
@@ -220,93 +250,102 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Task Manager - Built with ♥ by [Your Name]</p>
+        <p>&copy; 2024 Task Manager - Built by Pranjal, Bhavy, Rupals</p>
     </footer>
-
     <script>
-        const taskInput = document.getElementById('task-input');
-        const taskDate = document.getElementById('task-date');
-        const taskTime = document.getElementById('task-time');
-        const taskPriority = document.getElementById('task-priority');
-        const addTaskBtn = document.getElementById('add-task');
         const taskList = document.getElementById('task-list');
-
-        addTaskBtn.addEventListener('click', function() {
-            const taskText = taskInput.value.trim();
-            const dueDate = taskDate.value;
-            const dueTime = taskTime.value;
-            const priority = taskPriority.value;
-
-            if (taskText !== '') {
-                const taskItem = document.createElement('li');
-                taskItem.classList.add('task', 'show');
-
-                if (priority === 'high') taskItem.classList.add('priority-high');
-                if (priority === 'medium') taskItem.classList.add('priority-medium');
-                if (priority === 'low') taskItem.classList.add('priority-low');
-
-                taskItem.innerHTML = `
-                    <div class="task-details">
-                        <span>${taskText}</span>
-                        <small>${dueDate ? 'Due: ' + dueDate : ''} ${dueTime ? 'at ' + dueTime : ''}</small>
-                        <small>Priority: ${priority.charAt(0).toUpperCase() + priority.slice(1)}</small>
-                    </div>
-                    <div>
-                        <button class="complete-btn">Complete</button>
-                        <button class="delete-btn">Delete</button>
-                    </div>
-                `;
-                
-                taskList.appendChild(taskItem);
-
-                // Show a subtle background change
-                document.body.style.transition = 'background 0.5s ease';
-                document.body.style.backgroundColor = '#e3ffe5';
-
-                // Reset background color
-                setTimeout(() => {
-                    document.body.style.backgroundColor = '';
-                }, 500);
-
-                // Clear input fields
-                taskInput.value = '';
-                taskDate.value = '';
-                taskTime.value = '';
-                taskPriority.value = 'low';
-
-                // Add event listeners for the buttons
-                taskItem.querySelector('.complete-btn').addEventListener('click', function() {
-                    taskItem.classList.toggle('completed');
-                    if (taskItem.classList.contains('completed')) {
-                        alert('Task completed!');
-                        // Change background temporarily when task is marked completed
-                        document.body.style.backgroundColor = '#d4edda';
-                        setTimeout(() => {
-                            document.body.style.backgroundColor = '';
-                        }, 500);
-                    } else {
-                        alert('Task marked as incomplete!');
-                    }
-                });
-
-                taskItem.querySelector('.delete-btn').addEventListener('click', function() {
-                    taskItem.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                    taskItem.style.opacity = '0';
-                    taskItem.style.transform = 'translateY(-20px)';
-                    setTimeout(() => {
-                        taskItem.remove();
-                    }, 500);
-                });
-
-                // Check for overdue tasks
-                if (dueDate && new Date(dueDate) < new Date()) {
-                    taskItem.classList.add('overdue');
+        const addTaskButton = document.getElementById('add-task');
+    
+        // Function to render a single task item
+        function renderTask(task) {
+            const li = document.createElement('li');
+            li.className = 'task';
+            li.innerHTML = `
+                <div class="task-details">
+                    <strong>${task.todo_name}</strong> - <em>${task.description}</em><br>
+                    Due Date: ${task.due_date}<br>
+                    Priority: <span class="priority-${task.priority}">${task.priority}</span>
+                </div>
+                <button onclick="deleteTask(${task.id})">Delete</button>
+            `;
+            taskList.appendChild(li);
+        }
+    
+        // Fetch tasks from the backend and render them all
+        function fetchTasks() {
+            fetch('/todos')
+                .then(response => response.json())
+                .then(tasks => {
+                    taskList.innerHTML = ''; // Clear the current list
+                    tasks.forEach(task => renderTask(task)); // Render each task
+                })
+                .catch(error => console.error("Error fetching tasks:", error));
+        }
+    
+        // Add new task to the list
+        addTaskButton.addEventListener('click', () => {
+            const taskName = document.getElementById('task-input').value;
+            const description = document.getElementById('task-description').value;
+            const taskDate = document.getElementById('task-date').value;
+            const taskTime = document.getElementById('task-time').value;
+            const priority = document.getElementById('task-priority').value;
+    
+            // Format due date and time
+            const dueDate = taskDate || new Date().toISOString().split("T")[0];
+            const formattedDueDate = `${dueDate} ${taskTime || "12:00 PM"}`;
+    
+            fetch('/todos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    todo_name: taskName,
+                    description: description,
+                    due_date: formattedDueDate,
+                    priority: priority
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    // Clear input fields
+                    document.getElementById('task-input').value = '';
+                    document.getElementById('task-description').value = '';
+                    document.getElementById('task-date').value = '';
+                    document.getElementById('task-time').value = '';
+                    document.getElementById('task-priority').value = 'low';
+    
+                    // Fetch updated task list
+                    fetchTasks();
                 }
-            } else {
-                alert('Please enter a task!');
-            }
+            })
+            .catch(error => console.error("Error adding task:", error));
         });
+    
+        // Delete task from the list
+        function deleteTask(taskId) {
+            fetch(`/todos/${taskId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert(data.message);
+                    // Refresh the task list after deletion
+                    fetchTasks();
+                }
+            })
+            .catch(error => console.error("Error deleting task:", error));
+        }
+    
+        // Initial fetch to populate tasks
+        fetchTasks();
     </script>
-
+    
 </body>
 </html>
