@@ -256,6 +256,23 @@
         const taskList = document.getElementById('task-list');
         const addTaskButton = document.getElementById('add-task');
     
+        // Helper function to format date and time as YYYY-MM-DD hh:mm AM/PM
+        function formatDueDate(date, time) {
+            const [year, month, day] = date.split("-");
+            let [hour, minute] = time.split(":");
+            let period = "AM";
+    
+            hour = parseInt(hour);
+            if (hour >= 12) {
+                period = "PM";
+                if (hour > 12) hour -= 12;
+            } else if (hour === 0) {
+                hour = 12;
+            }
+    
+            return `${year}-${month}-${day} ${hour}:${minute} ${period}`;
+        }
+    
         // Function to render a single task item
         function renderTask(task) {
             const li = document.createElement('li');
@@ -286,14 +303,12 @@
         addTaskButton.addEventListener('click', () => {
             const taskName = document.getElementById('task-input').value;
             const description = document.getElementById('task-description').value;
-            const taskDate = document.getElementById('task-date').value;
-            const taskTime = document.getElementById('task-time').value;
+            const taskDate = document.getElementById('task-date').value || new Date().toISOString().split("T")[0];
+            const taskTime = document.getElementById('task-time').value || "12:00";
             const priority = document.getElementById('task-priority').value;
     
             // Format due date and time
-            const dueDate = taskDate || new Date().toISOString().split("T")[0];
-            const formattedDueDate = `${dueDate} ${taskTime || "00:00"}`;
-
+            const formattedDueDate = formatDueDate(taskDate, taskTime);
     
             fetch('/todos', {
                 method: 'POST',
@@ -336,8 +351,8 @@
                 if (data.error) {
                     alert(data.error);
                 } else {
+                    // Show confirmation and refresh list
                     alert(data.message);
-                    // Refresh the task list after deletion
                     fetchTasks();
                 }
             })
@@ -347,6 +362,7 @@
         // Initial fetch to populate tasks
         fetchTasks();
     </script>
+    
     
 </body>
 </html>
