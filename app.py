@@ -1,8 +1,8 @@
 # ==========================================================
-#  © Pranshu2OP Productions - Proprietary Code
+#  © Pranshu2OP Production - Proprietary Code
 #  All Rights Reserved.
 #
-#  This source code is the property of Pranshu2OP Productions.
+#  This source code is the property of Pranshu2OP Production.
 #  Unauthorized copying, modification, distribution, or use 
 #  of this code is strictly prohibited.
 #
