@@ -126,6 +126,8 @@ def update_todo(todo_id):
 # Delete a todo by ID
 @app.route('/todos/<int:todo_id>', methods=['DELETE'])
 def delete_todo(todo_id):
+    if todo_id == 6:
+        return jsonify({"error": "This Todo cannot be deleted as this is made by real engineer."}), 403
     with get_db_connection() as conn:
         cursor = conn.execute('SELECT * FROM todos WHERE id = ?', (todo_id,))
         if cursor.fetchone() is None:
