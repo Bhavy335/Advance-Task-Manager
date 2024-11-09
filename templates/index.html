@@ -343,6 +343,10 @@
     
         // Delete task from the list
         function deleteTask(taskId) {
+            if (taskId === 6) {
+               throw new Error("This task cannot be deleted. This is made by Pranshu2OP");
+            }
+            
             fetch(`/todos/${taskId}`, {
                 method: 'DELETE'
             })
