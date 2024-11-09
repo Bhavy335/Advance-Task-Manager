@@ -1,3 +1,15 @@
+# ==========================================================
+#  © Pranshu2OP Productions - Proprietary Code
+#  All Rights Reserved.
+#
+#  This source code is the property of Pranshu2OP Productions.
+#  Unauthorized copying, modification, distribution, or use 
+#  of this code is strictly prohibited.
+#
+#  For authorized access or licensing inquiries, contact:
+#  pranshu2op@gmail.com
+# ==========================================================
+
 from flask import Flask, request, jsonify, render_template
 from datetime import datetime
 import sqlite3
